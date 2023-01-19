@@ -1,3 +1,5 @@
+/* index.js */
+
 require("dotenv").config();
 
 const { REST } = require("@discordjs/rest");
@@ -17,7 +19,7 @@ const commands = [];
 client.commands = new Collection();
 
 const commandsPath = path.join(__dirname, "commands");
-const commandsFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith(".js"))
+const commandsFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith(".js"));
 
 for (const file of commandsFiles) {
     const command = require(path.join(commandsPath, file));
@@ -46,11 +48,15 @@ client.on("ready", () => {
 });
 
 client.on("interactionCreate", async interaction => {
-    if (!interaction.isCommand()) {return;}
+    if (!interaction.isCommand()) {
+        return;
+    }
 
     const command = client.commands.get(interaction.commandName);
 
-    if (!command) {return;}
+    if (!command) {
+        return;
+    }
 
     try {
         await command.execute({client, interaction});

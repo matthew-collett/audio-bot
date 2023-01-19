@@ -1,22 +1,25 @@
-const { SlashCommandBuilder } = require("@discordjs/builders")
+/* exit command */
 
-module.exports = {
-	data: new SlashCommandBuilder()
-        .setName("exit")
-        .setDescription("Kick the bot from the channel"),
+const { SlashCommandBuilder } = require("@discordjs/builders");
 
-	execute: async ({ client, interaction }) => {
+cmd = new SlashCommandBuilder()
+	.setName("exit")
+	.setDescription("Kick the bot from the channel");
 
-        // get current queue
-		const queue = client.player.getQueue(interaction.guildId)
+const cmdFunc = async function(client, interaction) {
 
-		if (!queue) {
-			await interaction.reply("There are no songs in the queue")
-			return;
-		}
+	// get current queue
+	const queue = client.player.getQueue(interaction.guildId);
 
-        // deletes all the songs from queue and exits the channel
-		queue.destroy();
-        await interaction.reply("Nicky don't leave me ://")
-	},
+	if (!queue) {
+		await interaction.reply("There are no songs in the queue");
+		return;
+	}
+
+	// deletes all the songs from queue and exits the channel
+	queue.destroy();
+
+	await interaction.reply("Nicky don't leave me ://");
 }
+
+module.exports = { data: cmd, execute: cmdFunc };

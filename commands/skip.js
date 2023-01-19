@@ -1,33 +1,32 @@
-const { SlashCommandBuilder } = require("@discordjs/builders")
-const { EmbedBuilder } = require("discord.js")
+/* skip command */
 
-module.exports = {
-	data: new SlashCommandBuilder()
-        .setName("skip")
-        .setDescription("Skip the current song"),
+const { SlashCommandBuilder } = require("@discordjs/builders");
+const { EmbedBuilder } = require("discord.js");
 
-	execute: async ({ client, interaction }) => {
+const cmd = new SlashCommandBuilder()
+    .setName("skip")
+    .setDescription("Skip the current song");
 
-        // get queue
-		const queue = client.player.getQueue(interaction.guildId)
+const cmdFunc = async function(client, interaction) {
 
-		if (!queue) {
-            await interaction.reply("There are no songs in the queue");
-            return;
-        }
+    // get queue
+	const queue = client.player.getQueue(interaction.guildId);
 
-        const currentSong = queue.current
+    if (!queue) {
+        await interaction.reply("There are no songs in the queue");
+        return;
+    }
 
-        // skip current song
-		queue.skip()
+    const currentSong = queue.current;
 
-        // return embed to the user
-        await interaction.reply({
-            embeds: [
-                new EmbedBuilder()
-                    .setDescription(`${currentSong.title} has been skipped`)
-                    .setThumbnail(currentSong.thumbnail)
-            ]
-        })
-	},
+    // skip current song
+    //queue.skip();
+
+    const embeds = new EmbedBuilder()
+        .setDescription(`${currentSong.title} has been skipped`)
+        .setThumbnail(currentSong.thumbnail);
+
+    await interaction.reply({ embeds: [embeds] });
 }
+
+module.exports = { data: cmd, execute: cmdFunc };

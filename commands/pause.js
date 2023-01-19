@@ -1,24 +1,26 @@
-const { SlashCommandBuilder } = require("@discordjs/builders")
+/* pause command */
 
-module.exports = {
-	data: new SlashCommandBuilder()
-        .setName("pause")
-        .setDescription("Pause the current song"),
+const { SlashCommandBuilder } = require("@discordjs/builders");
 
-	execute: async ({ client, interaction }) => {
+const cmd = new SlashCommandBuilder()
+.setName("pause")
+.setDescription("Pause the current song");
 
-        // get queue
-		const queue = client.player.getQueue(interaction.guildId)
+const cmdFunc = async function(client, interaction) {
 
-        // check if queue is empty
-		if (!queue) {
-			await interaction.reply("There are no songs in the queue")
-			return;
-		}
+	// get queue
+	const queue = client.player.getQueue(interaction.guildId);
 
-        // pause current song
-		queue.setPaused(true);
+	// check if queue is empty
+	if (!queue) {
+		await interaction.reply("There are no songs in the queue");
+		return;
+	}
 
-        await interaction.reply(`${queue.current.title} has been paused`)
-	},
+	// pause current song
+	queue.setPaused(true);
+
+	await interaction.reply(`${queue.current.title} has been paused`);
 }
+
+module.exports = { data: cmd, execute: cmdFunc };
